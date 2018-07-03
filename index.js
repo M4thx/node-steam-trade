@@ -22,14 +22,14 @@ SteamTrade.prototype._loadForeignInventory = function(appid, contextid) {
   var self = this;
   
   this._request.get({
-    uri: 'http://steamcommunity.com/trade/' + this.tradePartnerSteamID + '/foreigninventory?' + require('querystring').stringify({
+    uri: 'https://steamcommunity.com/trade/' + this.tradePartnerSteamID + '/foreigninventory?' + require('querystring').stringify({
       sessionid: this.sessionID,
       steamid: this.tradePartnerSteamID,
       appid: appid,
       contextid: contextid
     }),
     headers: {
-      referer: 'http://steamcommunity.com/trade/1'
+      referer: 'https://steamcommunity.com/trade/1'
     },
     json: true
   }, function continueFullInventoryRequestIfNecessary(error, response, body) {
@@ -51,7 +51,7 @@ SteamTrade.prototype._loadForeignInventory = function(appid, contextid) {
     if (body.more) {
       self.emit('debug', 'loading inventory: continuing from ' + body.more_start);
       self._request.get({
-        uri: 'http://steamcommunity.com/trade/' + self.tradePartnerSteamID + '/foreigninventory?' + require('querystring').stringify({
+        uri: 'https://steamcommunity.com/trade/' + self.tradePartnerSteamID + '/foreigninventory?' + require('querystring').stringify({
           sessionid: self.sessionID,
           steamid: self.tradePartnerSteamID,
           appid: appid,
@@ -59,7 +59,7 @@ SteamTrade.prototype._loadForeignInventory = function(appid, contextid) {
           start: body.more_start
         }),
         headers: {
-          referer: 'http://steamcommunity.com/trade/1'
+          referer: 'https://steamcommunity.com/trade/1'
         },
         json: true
       }, continueFullInventoryRequestIfNecessary);
@@ -84,7 +84,7 @@ SteamTrade.prototype._onTradeStatusUpdate = function(body, callback) {
     
     if (body.trade_status == 1) {
       this.emit('end', 'complete', function getItems(callback) {
-        self._request.get('http://steamcommunity.com/trade/' + body.tradeid + '/receipt/', function(error, response, body) {
+        self._request.get('https://steamcommunity.com/trade/' + body.tradeid + '/receipt/', function(error, response, body) {
           if (error || response.statusCode != 200) {
             self.emit('debug', 'Opening receipt page: ' + (error || response.statusCode));
             getItems(callback);
@@ -222,9 +222,9 @@ SteamTrade.prototype._send = function(action, data, callback) {
   var self = this;
   
   this._request.post({
-    uri: 'http://steamcommunity.com/trade/' + this.tradePartnerSteamID + '/' + action,
+    uri: 'https://steamcommunity.com/trade/' + this.tradePartnerSteamID + '/' + action,
     headers: {
-      referer: 'http://steamcommunity.com/trade/1'
+      referer: 'https://steamcommunity.com/trade/1'
     },
     form: data,
     json: true
@@ -247,7 +247,7 @@ SteamTrade.prototype._send = function(action, data, callback) {
 };
 
 SteamTrade.prototype.setCookie = function(cookie) {
-  this._j.setCookie(request.cookie(cookie), 'http://steamcommunity.com');
+  this._j.setCookie(request.cookie(cookie), 'https://steamcommunity.com');
 };
 
 SteamTrade.prototype.open = function(steamID, callback) {
@@ -265,7 +265,7 @@ SteamTrade.prototype.open = function(steamID, callback) {
 };
 
 SteamTrade.prototype.getContexts = function(callback) {
-  this._request.get('http://steamcommunity.com/trade/' + this.tradePartnerSteamID, function(error, response, body) {
+  this._request.get('https://steamcommunity.com/trade/' + this.tradePartnerSteamID, function(error, response, body) {
     var appContextData = body.match(/var g_rgAppContextData = (.*);/);
     callback(appContextData && JSON.parse(appContextData[1]));
   });
@@ -275,7 +275,7 @@ SteamTrade.prototype.loadInventory = function(appid, contextid, callback) {
   var inventory = [];
   
   this._request.get({
-    uri: 'http://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid,
+    uri: 'https://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid,
     json: true
   }, function continueFullInventoryRequestIfNecessary(error, response, body) {
     if (error || response.statusCode != 200 || typeof body == 'object' && !body.success) {
@@ -294,7 +294,7 @@ SteamTrade.prototype.loadInventory = function(appid, contextid, callback) {
     if (body.more) {
       this.emit('debug', 'loading my inventory: continuing from ' + body.more_start);
       this._request.get({
-        uri: 'http://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid + '?start=' + body.more_start,
+        uri: 'https://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid + '?start=' + body.more_start,
         json: true
       }, continueFullInventoryRequestIfNecessary.bind(this));
     } else {
