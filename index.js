@@ -24,7 +24,7 @@ SteamTrade.prototype._loadForeignInventory = function(appid, contextid) {
   this._request.get({
     uri: 'https://steamcommunity.com/trade/' + this.tradePartnerSteamID + '/foreigninventory?' + require('querystring').stringify({
       sessionid: this.sessionID,
-      steamid: this.tradePartnerSteamID,
+      steamid: this.tradePartnerSteamID.getSteamID64(),
       appid: appid,
       contextid: contextid
     }),
