@@ -11,7 +11,7 @@ function SteamTrade() {
   this._request = request.defaults({jar:this._j});
 }
 
-SteamTrade.prototype._loadForeignInventory = function(appid, contextid) {
+SteamTrade.prototype._loadForeignInventory = function(appid, contextid, language = 'english') {
   if (!this._themInventories[appid]) {
     this._themInventories[appid] = {};
   }
@@ -26,7 +26,8 @@ SteamTrade.prototype._loadForeignInventory = function(appid, contextid) {
       sessionid: this.sessionID,
       steamid: this.tradePartnerSteamID.getSteamID64(),
       appid: appid,
-      contextid: contextid
+      contextid: contextid,
+      l: language
     }),
     headers: {
       referer: 'https://steamcommunity.com/trade/1'
