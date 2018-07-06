@@ -276,7 +276,7 @@ SteamTrade.prototype.loadInventory = function(appid, contextid, callback) {
   var inventory = [];
   
   this._request.get({
-    uri: 'https://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid,
+    uri: 'https://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid + '?l=' + this.language,
     json: true
   }, function continueFullInventoryRequestIfNecessary(error, response, body) {
     if (error || response.statusCode != 200 || typeof body == 'object' && !body.success) {
@@ -295,7 +295,7 @@ SteamTrade.prototype.loadInventory = function(appid, contextid, callback) {
     if (body.more) {
       this.emit('debug', 'loading my inventory: continuing from ' + body.more_start);
       this._request.get({
-        uri: 'https://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid + '?start=' + body.more_start,
+        uri: 'https://steamcommunity.com/my/inventory/json/' + appid + '/' + contextid + '?start=' + body.more_start + '?l=' + this.language,
         json: true
       }, continueFullInventoryRequestIfNecessary.bind(this));
     } else {
