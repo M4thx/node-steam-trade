@@ -37,7 +37,7 @@ SteamTrade.prototype._loadForeignInventory = function(appid, contextid, language
     if (error) {
       self.emit('debug', 'loading inventory: ' + error);
       // retry
-      self._loadForeignInventory(appid, contextid);
+      self._loadForeignInventory(appid, contextid, language);
       return;
     }
     
@@ -179,7 +179,7 @@ SteamTrade.prototype._onTradeStatusUpdate = function(body, callback) {
       case '1':
         var inventory = this._themInventories[event.appid] && this._themInventories[event.appid][event.contextid];
         if (!inventory) {
-          this._loadForeignInventory(event.appid, event.contextid);
+          this._loadForeignInventory(event.appid, event.contextid, this.language);
           this._loadingInventoryData = true;
           return;
         }
